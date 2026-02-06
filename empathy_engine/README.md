@@ -6,21 +6,32 @@ A production-ready microservice that bridges the gap between sentiment and sound
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-00a393.svg)](https://fastapi.tiangolo.com/)
+
 ---
 
 ## 📖 Overview
 
-In the world of AI interaction, **text is smart, but voice is often dumb**. Standard Text-to-Speech (TTS) systems fall into the "Uncanny Valley"—they're functional but emotionally flat.
+In the world of AI interaction, text is smart, but voice is often dumb. Standard Text-to-Speech (TTS) systems fall into the "Uncanny Valley"—they're functional but emotionally flat.
 
-**The Empathy Engine** solves this by acting as a **Translation Layer** between sentiment and sound. It detects the emotional intent of user text and dynamically modulates vocal prosody (pitch, speed, volume) to match that feeling.
+The Empathy Engine solves this by acting as a Translation Layer between sentiment and sound. It detects the emotional intent of user text and dynamically modulates vocal prosody (pitch, speed, volume) to match that feeling.
 
 ### ✨ Key Features
 
-- 🧠 **Granular Emotion Detection** — Uses distilled RoBERTa model to detect 7 distinct emotional states
-- 🗣️ **Native Prosody Injection** — Modifies rate, pitch, and volume at generation level (no DSP distortion)
-- ⚡ **Asynchronous Architecture** — Built on FastAPI with async/await for high performance
-- 🎨 **Interactive Web Interface** — Real-time UI for testing and visualization
-- 🎯 **Production-Ready** — Clean API endpoints ready for integration
+- 🧠 Granular Emotion Detection — Uses distilled RoBERTa model to detect 7 distinct emotional states
+- 🗣️ Native Prosody Injection — Modifies rate, pitch, and volume at generation level (no DSP distortion)
+- ⚡ Asynchronous Architecture — Built on FastAPI with async/await for high performance
+- 🎨 Interactive Web Interface — Real-time UI for testing and visualization
+- 🎯 Production-Ready — Clean API endpoints ready for integration
+
+---
+
+## 🎨 Screenshots
+
+![Empathy Engine - Joy Detection](./images/empathy-engine-joy.png)
+
+![Empathy Engine - Sadness Detection](./images/empathy-engine-sadness.png)
+
+![Empathy Engine - Anger Detection](./images/empathy-engine-anger.png)
 
 ---
 
@@ -30,23 +41,25 @@ This project underwent a critical architectural pivot to ensure the highest qual
 
 ### Phase 1: The DSP Prototype (gTTS + Pydub)
 
-**Approach:** Generated neutral audio with gTTS, then applied Digital Signal Processing via Pydub.
+Approach: Generated neutral audio with gTTS, then applied Digital Signal Processing via Pydub.
 
-**Problem:**
+Problem:
+
 - Joy (high pitch) → Sounded like a "chipmunk" or helium effect
 - Sadness (low speed) → Sounded like a "drunk robot" due to sample-rate artifacts
 
-**Verdict:** ❌ Technically correct, but emotionally broken.
+Verdict: ❌ Technically correct, but emotionally broken.
 
 ### Phase 2: The Neural Upgrade (Edge-TTS)
 
-**Approach:** Inject SSML parameters directly into Microsoft Edge Neural TTS.
+Approach: Inject SSML parameters directly into Microsoft Edge Neural TTS.
 
-**Result:**
+Result:
+
 - Joy is fast and bright, but retains human timbre
 - Sadness is slow and deep, but articulates clearly without slurring
 
-**Verdict:** ✅ High-fidelity, human-like empathy.
+Verdict: ✅ High-fidelity, human-like empathy.
 
 ---
 
@@ -56,13 +69,13 @@ The engine uses deterministic logic to translate semantic intent into acoustic p
 
 | Emotion | Rate (Speed) | Pitch | Volume | Rationale |
 |---------|--------------|-------|--------|-----------|
-| **JOY** | +20% | +15Hz | +10% | Happiness is energetic with faster speech and higher frequency |
-| **SADNESS** | -15% | -15Hz | -20% | Low energy results in slower speech and lower vocal tension |
-| **ANGER** | +10% | -5Hz | +30% | High arousal (loud/fast) but authoritative (lower/grittier) |
-| **SURPRISE** | +25% | +20Hz | +15% | Shock causes sharp spikes in pitch and tempo |
-| **FEAR** | +15% | +10Hz | 0% | High arousal with tense, erratic speed and high pitch |
-| **DISGUST** | -10% | -10Hz | -10% | Low arousal with vocal distancing |
-| **NEUTRAL** | 0% | 0Hz | 0% | Baseline control |
+| JOY | +20% | +15Hz | +10% | Happiness is energetic with faster speech and higher frequency |
+| SADNESS | -15% | -15Hz | -20% | Low energy results in slower speech and lower vocal tension |
+| ANGER | +10% | -5Hz | +30% | High arousal (loud/fast) but authoritative (lower/grittier) |
+| SURPRISE | +25% | +20Hz | +15% | Shock causes sharp spikes in pitch and tempo |
+| FEAR | +15% | +10Hz | 0% | High arousal with tense, erratic speed and high pitch |
+| DISGUST | -10% | -10Hz | -10% | Low arousal with vocal distancing |
+| NEUTRAL | 0% | 0Hz | 0% | Baseline control |
 
 ---
 
@@ -112,10 +125,10 @@ INFO: Uvicorn running on http://127.0.0.1:8000
 
 ### Method A: Web Interface (Recommended)
 
-1. Open your browser to `http://127.0.0.1:8000`
-2. Type a sentence (e.g., *"I can't believe you did this, I am so angry!"*)
-3. Click **Generate Voice**
-4. Observe the **Detected Emotion** badge and diagnostics panel
+1. Open your browser to http://127.0.0.1:8000
+2. Type a sentence (e.g., "I can't believe you did this, I am so angry!")
+3. Click Generate Voice
+4. Observe the Detected Emotion badge and diagnostics panel
 
 ### Method B: API Endpoint
 
@@ -127,14 +140,15 @@ INFO: Uvicorn running on http://127.0.0.1:8000
 }
 ```
 
-**Response:**
-- Returns a binary `.mp3` file
-- Custom headers:
-  - `X-Detected-Emotion: joy`
-  - `X-Modulation-Pitch: +15Hz`
-  - `X-Modulation-Rate: +20%`
+Response:
 
-**Example using cURL:**
+- Returns a binary .mp3 file
+- Custom headers:
+  - X-Detected-Emotion: joy
+  - X-Modulation-Pitch: +15Hz
+  - X-Modulation-Rate: +20%
+
+Example using cURL:
 
 ```bash
 curl -X POST "http://127.0.0.1:8000/api/v1/synthesize" \
@@ -169,11 +183,11 @@ empathy_engine/
 
 | Component | Technology | Purpose |
 |-----------|-----------|---------|
-| **Emotion Detection** | `j-hartmann/emotion-english-distilroberta-base` | RoBERTa model for 7-class emotion classification |
-| **TTS Engine** | Microsoft Edge Neural TTS | High-quality neural voice synthesis |
-| **API Framework** | FastAPI | Async/await architecture for performance |
-| **SSML Processing** | `edge-tts` | Native prosody parameter injection |
-| **Frontend** | Vanilla JS + HTML5 | Lightweight, dependency-free UI |
+| Emotion Detection | j-hartmann/emotion-english-distilroberta-base | RoBERTa model for 7-class emotion classification |
+| TTS Engine | Microsoft Edge Neural TTS | High-quality neural voice synthesis |
+| API Framework | FastAPI | Async/await architecture for performance |
+| SSML Processing | edge-tts | Native prosody parameter injection |
+| Frontend | Vanilla JS + HTML5 | Lightweight, dependency-free UI |
 
 ---
 
@@ -184,9 +198,9 @@ empathy_engine/
 - [x] Vocal parameter modulation (rate, pitch, volume)
 - [x] Deterministic emotion-to-voice mapping
 - [x] Audio output (.mp3 generation)
-- [x] **Bonus:** Granular emotion classification with RoBERTa
-- [x] **Bonus:** Interactive web interface
-- [x] **Bonus:** SSML integration via Edge-TTS
+- [x] Bonus: Granular emotion classification with RoBERTa
+- [x] Bonus: Interactive web interface
+- [x] Bonus: SSML integration via Edge-TTS
 
 ---
 
@@ -206,7 +220,7 @@ empathy_engine/
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
+2. Create your feature branch (git checkout -b feature/AmazingFeature)
+3. Commit your changes (git commit -m 'Add some AmazingFeature')
+4. Push to the branch (git push origin feature/AmazingFeature)
 5. Open a Pull Request
