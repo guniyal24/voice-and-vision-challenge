@@ -24,17 +24,6 @@ The Empathy Engine solves this by acting as a Translation Layer between sentimen
 - 🎯 Production-Ready — Clean API endpoints ready for integration
 
 ---
-
-## 🎨 Screenshots
-
-![Empathy Engine - Joy Detection](./images/empathy-engine-joy.png)
-
-![Empathy Engine - Sadness Detection](./images/empathy-engine-sadness.png)
-
-![Empathy Engine - Anger Detection](./images/empathy-engine-anger.png)
-
----
-
 ## 💡 The Engineering Journey
 
 This project underwent a critical architectural pivot to ensure the highest quality output.
