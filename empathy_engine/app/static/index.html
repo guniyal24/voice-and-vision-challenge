@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Empathy Engine</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; background: #f5f5f5; }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; text-align: center; }
+        textarea { width: 100%; height: 100px; padding: 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; margin-bottom: 20px; box-sizing: border-box; }
+        button { background: #3498db; color: white; border: none; padding: 12px 25px; font-size: 16px; border-radius: 6px; cursor: pointer; transition: 0.3s; width: 100%; }
+        button:hover { background: #2980b9; }
+        button:disabled { background: #95a5a6; cursor: not-allowed; }
+        #result { margin-top: 30px; display: none; text-align: center; }
+        .status-box { padding: 15px; border-radius: 8px; background: #ecf0f1; margin-top: 15px; text-align: left; }
+        .audio-player { width: 100%; margin-top: 15px; }
+        .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; color: white; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎙️ The Empathy Engine</h1>
+        <p style="text-align: center; color: #7f8c8d;">Type text below. The AI will detect the emotion and speak it with the correct tone.</p>
+        
+        <textarea id="inputText" placeholder="Type something emotional here... (e.g., 'I am so angry right now!' or 'I finally got the job!')"></textarea>
+        <button id="speakBtn" onclick="synthesize()">Generate Voice</button>
+
+        <div id="result">
+            <h3 id="emotionDisplay"></h3>
+            <audio id="audioPlayer" controls class="audio-player"></audio>
+            
+            <div class="status-box">
+                <strong>🔧 AI Diagnostics:</strong>
+                <ul id="debugInfo" style="list-style: none; padding-left: 0; margin-top: 5px;"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function synthesize() {
+            const text = document.getElementById('inputText').value;
+            const btn = document.getElementById('speakBtn');
+            const resultDiv = document.getElementById('result');
+            
+            if (!text) return alert("Please enter some text!");
+
+            btn.disabled = true;
+            btn.innerText = "Analyzing & Synthesizing...";
+
+            try {
+                const response = await fetch('/api/v1/synthesize', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: text })
+                });
+
+                if (!response.ok) throw new Error("API Error");
+
+                // Get headers for debug info
+                const emotion = response.headers.get("X-Detected-Emotion");
+                const speed = response.headers.get("X-Modulation-Speed");
+                const pitch = response.headers.get("X-Modulation-Pitch");
+
+                // Get audio blob
+                const blob = await response.blob();
+                const audioUrl = URL.createObjectURL(blob);
+
+                // Update UI
+                const colors = {
+                    "joy": "#2ecc71", "anger": "#e74c3c", "sadness": "#34495e", 
+                    "fear": "#9b59b6", "surprise": "#f1c40f", "neutral": "#95a5a6"
+                };
+                
+                document.getElementById('emotionDisplay').innerHTML = 
+                    `Detected Emotion: <span class="badge" style="background:${colors[emotion] || '#333'}">${emotion.toUpperCase()}</span>`;
+                
+                document.getElementById('debugInfo').innerHTML = 
+                    `<li>⚡ Speed Factor: <b>${speed}x</b></li>
+                     <li>🔊 Pitch Shift: <b>${pitch} semitones</b></li>`;
+
+                const audio = document.getElementById('audioPlayer');
+                audio.src = audioUrl;
+                audio.play();
+                
+                resultDiv.style.display = "block";
+
+            } catch (err) {
+                alert("Error: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Generate Voice";
+            }
+        }
+    </script>
+</body>
+</html>

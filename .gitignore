@@ -1,0 +1,11 @@
+# Ignore virtual environments in any subfolder
+venv/
+env/
+
+# Ignore sensitive keys
+.env
+
+# Ignore python garbage
+__pycache__/
+*.pyc
+.DS_Store
