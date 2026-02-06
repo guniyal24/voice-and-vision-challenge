@@ -1,4 +1,4 @@
-🎙️👁️ Voice & Vision: Multimodal AI Suite
+[🎙️👁️ Voice & Vision: Multimodal AI Suite
 A Dual-Engine AI Solution for Emotional Speech & Visual Storytelling
 📖 Overview
 This repository houses two advanced AI microservices developed for the Voice & Vision Challenge. These projects demonstrate the power of Multimodal Generative AI—bridging the gap between text, sound, and sight.
@@ -51,3 +51,4 @@ To run either project, please navigate to the respective folder and follow the i
 # To run the Visualizer
 cd pitch_visualizer
 # Follow instructions in pitch_visualizer/README.md
+](https://github.com/guniyal24/voice-and-vision-challenge)
